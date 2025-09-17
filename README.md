@@ -1,0 +1,2 @@
+# spadez
+A Spades Game
