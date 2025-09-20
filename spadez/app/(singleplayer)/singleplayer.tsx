@@ -1,4 +1,5 @@
 import { Text, View} from "react-native";
+import CardTable from "@/components/CardTable";
 
 export default function SinglePlayer(){
 
@@ -6,8 +7,11 @@ export default function SinglePlayer(){
     <View>
         <Text>
             Hello
+            <CardTable></CardTable>
         </Text>
-        
+
     </View>
+
+    
     )
 }
