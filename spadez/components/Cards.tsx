@@ -1,6 +1,7 @@
 //Defining All 54 Cards
 
-import { useState } from "react"
+import React, { useState } from "react"
+import { View, Text, StyleSheet } from "react-native";
 
 const deckData = [
 
@@ -19,7 +20,7 @@ const cards =  [
 {id:"H-10", suit:"heart", rank:"Jack"},{id:"H-9", suit:"heart",rank:"Ten"},
 {id:"H-8", suit:"heart", rank:"Nine"},{id:"H-7", suit:"heart",rank:"Eight"},
 {id:"H-6", suit:"heart", rank:"Seven"},{id:"H-5", suit:"heart",rank:"Six"},
-{id:"H-4", suit:"heart", rank:"Five"},{id:"H-3", suit:"Heart",rank:"Four"},
+{id:"H-4", suit:"heart", rank:"Five"},{id:"H-3", suit:"heart",rank:"Four"},
 {id:"H-2", suit:"heart", rank:"Three"},{id:"H-1", suit:"heart",rank:"Two"},
 {id:"C-13", suit:"club", rank:"Ace"},{id:"C-12", suit:"club",rank:"King"},
 {id:"C-11", suit:"club", rank:"Queen"},{id:"C-10", suit:"club",rank:"Jack"},
@@ -36,20 +37,69 @@ const cards =  [
 {id:"D-2", suit:"diamond", rank:"Three"},{id:"D-1", suit:"diamond",rank:"Two"},
 ]
 
+interface CardProps {
+    suit: string;
+    rank: string;
+    id: string;
+
+}
+
+const Card: React.FC<CardProps> = ({suit, rank}) => {
+    const cardColor = (suit === 'heart' || suit === 'diamond') ? 'red' : 'black';
+    
+    return (
+        <View style = {[ styles.cardContainer, {borderColor: cardColor}]}>
+            <Text style = {[styles.cardText, {color: cardColor} ]}>{rank}</Text>
+            <Text style = {[styles.cardText, {color: cardColor} ]}>{suit}</Text>
+        </View>
+
+    )
+};
+
+
 //This function should handle Rendering each card
-export default function RenderPlayerCards () {
+export default function RenderPlayerCards (CardProps) {
 const [playerHand, setPlayerHand] = useState([]);
+
 
     function shuffleDeck(cards:any){
         for(let i = cards.length - 1; i > 0; i--){
             const j = Math.floor(Math.random()* (i+1));
             [cards[i],cards[j] = [cards[j],cards[i]]];
         }
-        return cards;
+        return [cards];
     }
-    return(shuffleDeck(cards))
+    return(
+        shuffleDeck(cards),
+    <View>
+        {[CardProps]}
+    </View>
+    );
+   
 }
 
+
+const styles = StyleSheet.create({
+    cardContainer: {
+        width: 80,
+        height: 120,
+        backgroundColor:'#fff',
+        borderRadius: 8,
+        borderWidth: 2,
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        margin: 5,
+        shadowColor: '#000',
+        shadowOffset: {width: 0, height:2},
+        shadowOpacity: 0.2,
+        shadowRadius: 2,
+        elevation: 3,
+    },
+    cardText: {
+        fontSize: 20,
+        fontWeight: 'bold', 
+    },
+});
 
  
 
