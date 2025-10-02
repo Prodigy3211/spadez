@@ -58,25 +58,39 @@ const Card: React.FC<CardProps> = ({suit, rank}) => {
 
 
 //This function should handle Rendering each card
-export default function RenderPlayerCards (CardProps) {
-const [playerHand, setPlayerHand] = useState([]);
+export default function RenderPlayerCards ({cards = []} : {cards?: any[]}) {
+const [playerHand, setPlayerHand] = useState<any[]>([]);
 
 
-    function shuffleDeck(cards:any){
-        for(let i = cards.length - 1; i > 0; i--){
+    function shuffleDeck(cards:any[]): any[]{
+        const shuffled = [...cards];
+        for(let i = shuffled.length - 1; i > 0; i--){
             const j = Math.floor(Math.random()* (i+1));
-            [cards[i],cards[j] = [cards[j],cards[i]]];
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
         }
-        return [cards];
+        return shuffled;
     }
+
+    //Deal Cards
+    React.useEffect(() => {
+        const shuffled = shuffleDeck(cards);
+        setPlayerHand(shuffled.slice(0,13)); //player gets 13 cards
+    }, [cards]);
+
     return(
-        shuffleDeck(cards),
-    <View>
-        {[CardProps]}
-    </View>
+        <View style = {styles.handContainer}>
+            {playerHand.map((card) => (
+                <Card 
+                    key ={card.id}
+                    suit={card.suit}
+                    rank={card.rank}
+                    id={card.id}
+                />
+            ))}
+            </View>
     );
-   
 }
+   
 
 
 const styles = StyleSheet.create({
@@ -99,6 +113,12 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold', 
     },
+    handContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        padding: 10,
+    }
 });
 
  
