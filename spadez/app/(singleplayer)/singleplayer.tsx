@@ -7,10 +7,8 @@ export default function SinglePlayer(){
 
     return(
     <View style = {styles.feltTable} >
-        <Text>
-            Hello
-            <CardTable></CardTable>
-        </Text>
+          
+            <CardTable />
 
     </View>
 
@@ -21,8 +19,9 @@ export default function SinglePlayer(){
 }
 const styles = StyleSheet.create({
     feltTable: {
-    backgroundColor: "green",
-    width:"auto",
-    height:950,
+    backgroundColor: "#0d4f0d",
+    // width:"auto",
+    // height:950,
+    flex: 1,
   },
 });
