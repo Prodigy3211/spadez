@@ -1,7 +1,7 @@
 //Defining All 54 Cards
 
 import React, { useState } from "react"
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
 const deckData = [
 
@@ -41,50 +41,64 @@ interface CardProps {
     suit: string;
     rank: string;
     id: string;
+    onPress?: () => void;
+    disabled?: boolean;
 
 }
 
-const Card: React.FC<CardProps> = ({suit, rank}) => {
+const Card: React.FC<CardProps> = ({suit, rank, onPress, disabled}) => {
     const cardColor = (suit === 'heart' || suit === 'diamond') ? 'red' : 'black';
     
     return (
+        <TouchableOpacity
+            style = {[
+                styles.cardContainer,
+                {borderColor: cardColor},
+                disabled && styles.disabledCard
+            ]}
+            onPress = {onPress}
+            disabled = {disabled}
+        >
+        
         <View style = {[ styles.cardContainer, {borderColor: cardColor}]}>
             <Text style = {[styles.cardText, {color: cardColor} ]}>{rank}</Text>
             <Text style = {[styles.cardText, {color: cardColor} ]}>{suit}</Text>
         </View>
+        </TouchableOpacity>
 
     )
 };
 
 
 //This function should handle Rendering each card
-export default function RenderPlayerCards ({cards = []} : {cards?: any[]}) {
-const [playerHand, setPlayerHand] = useState<any[]>([]);
+export default function RenderPlayerCards ({cards = [], onCardPlay}: {cards?: any[], onCardPlay?: (card: any) => void}) {
+// const [playerHand, setPlayerHand] = useState<any[]>([]);
 
 
-    function shuffleDeck(cards:any[]): any[]{
-        const shuffled = [...cards];
-        for(let i = shuffled.length - 1; i > 0; i--){
-            const j = Math.floor(Math.random()* (i+1));
-            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-        }
-        return shuffled;
-    }
+    // function shuffleDeck(cards:any[]): any[]{
+    //     const shuffled = [...cards];
+    //     for(let i = shuffled.length - 1; i > 0; i--){
+    //         const j = Math.floor(Math.random()* (i+1));
+    //         [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    //     }
+    //     return shuffled;
+    // }
 
-    //Deal Cards
-    React.useEffect(() => {
-        const shuffled = shuffleDeck(cards);
-        setPlayerHand(shuffled.slice(0,13)); //player gets 13 cards
-    }, [cards]);
+    // //Deal Cards
+    // React.useEffect(() => {
+    //     const shuffled = shuffleDeck(cards);
+    //     setPlayerHand(shuffled.slice(0,13)); //player gets 13 cards
+    // }, [cards]);
 
     return(
         <View style = {styles.handContainer}>
-            {playerHand.map((card) => (
+            {cards.map((card) => (
                 <Card 
                     key ={card.id}
                     suit={card.suit}
                     rank={card.rank}
                     id={card.id}
+                    onPress = {() => onCardPlay?.(card)}
                 />
             ))}
             </View>
@@ -118,7 +132,10 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         justifyContent: 'center',
         padding: 10,
-    }
+    },
+    disabledCard: {
+        opacity: 0.5,
+    },
 });
 
  
